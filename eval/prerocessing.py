@@ -1,6 +1,6 @@
 # Author: Seunghyun Kim
 # Date: 18 Feb 2019
-# Last updated: 19 Feb 2019
+# Last updated: 20 Feb 2019
 
 import os
 from collections import namedtuple
@@ -68,13 +68,6 @@ def unzip_data(input_dir, output_dir):
     task requires at least 120 Gb of free space and 7-zip package.
     If you see that the command is not found when you run the task,
     see the following URL: https://www.7-zip.org/
-
-    @params
-        input_dir:
-        output_dir:
-
-    @returns
-        None
     """
     
     if not os.path.isdir(output_dir):
@@ -99,17 +92,6 @@ def resample_mhd_to_npy(input_dir, output_dir, csv_file, norm_min, norm_max,
     Sometimes you only need a voxel CSV file. If you set the variable
     only_csv to True, resample_mhd_to_npy() save only the voxel CSV
     file. This takes a short time to calculate.
-
-    @params
-        input_dir:
-        output_dir:
-        csv_file:
-        norm_min:
-        norm_max:
-        only_csv:
-        
-    @returns
-        None
     """
     
     if not only_csv and os.path.isdir(output_dir):
@@ -185,17 +167,6 @@ def extract_candidate(input_dir, output_dir, csv_file, size, margin=0, get_2d=Tr
     This task takes a lot of time, so it is a good idea to save
     the results. The required free space depends on the variables
     extract_size, margin, and get_2d.
-
-    @params
-        input_dir:
-        output_dir:
-        csv_file:
-        size:
-        margin:
-        get_2d:
-        
-    @returns
-        None
     """
     
     if os.path.isdir(output_dir):
@@ -219,6 +190,7 @@ def extract_candidate(input_dir, output_dir, csv_file, size, margin=0, get_2d=Tr
         subsets.append(subset)
         
     df = pd.read_csv(csv_file)
+    fill = len(str(len(df)))
     
     for subset in subsets:
         subset_name = os.path.basename(subset.path)
@@ -236,10 +208,9 @@ def extract_candidate(input_dir, output_dir, csv_file, size, margin=0, get_2d=Tr
                 cand_arr = _wrap(cand_arr, size)
                 if get_2d:
                     cand_arr = cand_arr[int(cand_arr.shape[0]/2)]
-                
-                tag_r = '_r' + str(i)
-                tag_c = '_c' + str(row['class'])
-                cand_name = npy_name[:-4] + tag_r + tag_c + '.npy'
+                tag_r = 'row' + str(i).zfill(fill)
+                tag_c = '_cls' + str(row['class'])
+                cand_name = tag_r + tag_c + '.npy'
                 cand_path = os.path.join(new_subset_path, cand_name)
                 np.save(cand_path, cand_arr)
 
@@ -256,14 +227,14 @@ def main():
     #   The directory path where the extracted files will be stored.
     #
     # resample_dir:
-    #   The The directory path where resampled data will be stored.
+    #   The directory path where resampled data will be stored.
     #
     # extract_dir:
-    #   The The directory path where extracted cadidates will be stored.
+    #   The directory path where extracted candidates will be stored.
     data_dir = '/data/datasets/luna16'
     unzip_dir = '/data/datasets/luna16-unzip'
     resample_dir = '/data/datasets/luna16-resample'
-    extract_dir = '/data/datasets/luna16-extract'
+    extract_dir = '/data/datasets/luna16-extracted'
 
     # Step 1. Unzip all data.
     #   We assume that you have downloaded all the necessary data from
@@ -285,6 +256,7 @@ def main():
     csv_file = os.path.join(unzip_dir, 'candidates_V2.csv')
     norm_min, norm_max = -1000, 400
     only_csv = False
+
     resample_mhd_to_npy(unzip_dir, resample_dir, csv_file, norm_min, norm_max, only_csv)
 
     # Step 3. Extract all candidates from npy files.
@@ -293,6 +265,7 @@ def main():
     #   extract_size, margin, and get_2d.
     voxel_csv_file = os.path.join(resample_dir, 'voxel_candidates_V2.csv')
     extract_size = [56, 56, 56]
+
     extract_candidate(resample_dir, extract_dir, voxel_csv_file, extract_size)
 
 
