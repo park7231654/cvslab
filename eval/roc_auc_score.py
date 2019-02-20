@@ -44,8 +44,8 @@ if __name__ == "__main__":
     best_epoch = 7 # LeNet-5 = 6 / VGG-16 = 19 / ResNet-152 = 9 / Inception-V3 = 2 / DenseNet-201 = 7 / NASNet = 11
     total_number_of_subset = 8 # LeNet-5 = 8 / VGG-16 = 9 / ResNet-152 = 7 / Inception-V3 = 7 / DenseNet-201 = 8 / NASNet = 10
 
-    model_name = 'DenseNet-201' # LeNet-5 / VGG-16 / ResNet-152 / DenseNet-201 / NASNet
-    model = load_model('LUNA16_2D_SUBSET0.h5')
+    model_name = '?' # LeNet-5 / VGG-16 / ResNet-152 / DenseNet-201 / NASNet
+    model = load_model('?.h5')
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
     model.summary()
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         if fold == ? or fold == ? or fold == ?:
             continue
         else:
-            model.load_weights('LUNA16_2D_SUBSET'+str(fold)+'.h5')
+            model.load_weights('?.h5')
 
             val_batches = [os.path.join(data_dir, 'subset'+str(fold)+'.npy')]
             test_batches= os.path.join(data_dir, 'subset'+str(fold)+'.npy') # For extracting test data set labels

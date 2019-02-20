@@ -1,4 +1,4 @@
-# file name format = 'model name + epoch + subset number' ex) Inception-V3_1_Epoch_Test_0
+# file name format = 'model name + epoch + subset number' ex) Inception-V3_1_Epoch_Subset_0
 
 import numpy as np
 import pandas as pd
