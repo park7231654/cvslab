@@ -1,6 +1,6 @@
 # Author: Seunghyun Kim
 # Date: 18 Feb 2019
-# Last updated: 20 Feb 2019
+# Last updated: 21 Feb 2019
 
 import os
 from collections import namedtuple
@@ -218,7 +218,7 @@ def extract_candidate(input_dir, output_dir, csv_file, size, margin=0, get_2d=Tr
 def main():
     warnings.filterwarnings('ignore', '.*output shape of zoom.*')
 
-    # data_dir:
+    # origin_dir:
     #   The directory path containing the compressed files downloaded from the website.
     #   The compression files we used are listed below:
     #   subset0.zip, ..., subset9.zip, candidates_V2.zip (total 11)
@@ -231,7 +231,7 @@ def main():
     #
     # extract_dir:
     #   The directory path where extracted candidates will be stored.
-    data_dir = '/data/datasets/luna16'
+    origin_dir = '/data/datasets/luna16-origin'
     unzip_dir = '/data/datasets/luna16-unzip'
     resample_dir = '/data/datasets/luna16-resample'
     extract_dir = '/data/datasets/luna16-extracted'
@@ -242,7 +242,7 @@ def main():
     #   task requires at least 120 Gb of free space and 7-zip package.
     #   If you see that the command is not found when you run the task,
     #   see the following URL: https://www.7-zip.org/
-    unzip_data(data_dir, unzip_dir)
+    unzip_data(origin_dir, unzip_dir)
 
     # Step 2. Resample all mhd to npy.
     #   For preprocessing the data, resamples the coordinate system of
